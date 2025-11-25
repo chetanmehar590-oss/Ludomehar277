@@ -1,24 +1,16 @@
-FROM node:18-alpine
+FROM node:18
 
-WORKDIR /app
+WORKDIR /build
 
-# Copy frontend only
-COPY frontend ./frontend
+# Copy frontend
+COPY frontend ./
 
-# Go to frontend directory
-WORKDIR /app/frontend
+# Install and build (using npm for stability)
+RUN npm install --legacy-peer-deps && \
+    npm run build && \
+    npm install -g serve
 
-# Clean install
-RUN rm -rf node_modules yarn.lock || true && \
-    yarn cache clean && \
-    yarn install --network-timeout 1000000 && \
-    yarn build
-
-# Install serve
-RUN npm install -g serve
-
-# Expose port
 EXPOSE 3000
 
-# Start from build directory
-CMD ["serve", "-s", "build", "-p", "3000"]
+# Serve the build
+CMD ["serve", "-s", "build", "-l", "3000"]
