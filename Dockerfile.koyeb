@@ -1,12 +1,18 @@
-FROM node:18
+FROM node:18-alpine
 
 WORKDIR /app
 
-# Copy everything
-COPY . .
+# Copy frontend only
+COPY frontend ./frontend
 
-# Install and build frontend
-RUN cd frontend && yarn install && yarn build
+# Go to frontend directory
+WORKDIR /app/frontend
+
+# Clean install
+RUN rm -rf node_modules yarn.lock || true && \
+    yarn cache clean && \
+    yarn install --network-timeout 1000000 && \
+    yarn build
 
 # Install serve
 RUN npm install -g serve
@@ -14,5 +20,5 @@ RUN npm install -g serve
 # Expose port
 EXPOSE 3000
 
-# Start app
-CMD ["serve", "-s", "frontend/build", "-l", "3000"]
+# Start from build directory
+CMD ["serve", "-s", "build", "-p", "3000"]
