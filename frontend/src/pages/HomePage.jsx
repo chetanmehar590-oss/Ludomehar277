@@ -187,20 +187,24 @@ const HomePage = () => {
               <h3 className="text-xl font-bold">Last Table Request</h3>
             </div>
             
-            <div className="flex items-center gap-4 text-lg">
-              <span className="text-2xl">💰</span>
-              <span className="font-bold">₹{lastRequest.amount.toFixed(2)}</span>
-              <span className="text-2xl">🎲</span>
-              <span className="font-semibold">{lastRequest.type}</span>
-              <span className="text-2xl">📊</span>
-              <span>{lastRequest.gamePlus}</span>
-            </div>
-            
-            <div className="flex items-center gap-2 text-base">
-              <span className="text-xl">⚙️</span>
-              <span className="font-semibold">Options:</span>
-              <span>{lastRequest.options.length > 0 ? lastRequest.options.join(', ') : 'None'}</span>
-            </div>
+            {lastRequest && (
+              <>
+                <div className="flex items-center gap-4 text-lg">
+                  <span className="text-2xl">💰</span>
+                  <span className="font-bold">₹{lastRequest.amount.toFixed(2)}</span>
+                  <span className="text-2xl">🎲</span>
+                  <span className="font-semibold capitalize">{lastRequest.type.replace('_', ' ')}</span>
+                  <span className="text-2xl">📊</span>
+                  <span>{lastRequest.game_plus || 0}</span>
+                </div>
+                
+                <div className="flex items-center gap-2 text-base">
+                  <span className="text-xl">⚙️</span>
+                  <span className="font-semibold">Options:</span>
+                  <span>{lastRequest.options && lastRequest.options.length > 0 ? lastRequest.options.join(', ') : 'None'}</span>
+                </div>
+              </>
+            )}
 
             <div className="flex gap-3 mt-4">
               <Button
