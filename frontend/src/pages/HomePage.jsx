@@ -73,10 +73,12 @@ const HomePage = () => {
   };
 
   const handleCopyTable = () => {
+    if (!lastRequest) return;
+    
     setAmount(lastRequest.amount.toString());
     setType(lastRequest.type.toLowerCase());
-    setGamePlus(lastRequest.gamePlus.toString());
-    setSelectedOptions(lastRequest.options);
+    setGamePlus((lastRequest.game_plus || 0).toString());
+    setSelectedOptions(lastRequest.options || []);
     toast({
       title: "Table Copied",
       description: "Last table details copied successfully"
