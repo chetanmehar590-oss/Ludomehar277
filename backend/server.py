@@ -219,7 +219,7 @@ async def get_user_balance(user_id: str):
 @api_router.post("/user/balance/{user_id}")
 async def update_user_balance(user_id: str, balance: float):
     """Update user balance"""
-    result = await db.users.update_one(
+    await db.users.update_one(
         {"user_id": user_id},
         {
             "$set": {
