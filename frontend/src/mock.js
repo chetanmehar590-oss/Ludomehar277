@@ -38,8 +38,16 @@ export const mockTableHistory = [
 
 export const tableTypes = [
   { value: "full", label: "Full" },
-  { value: "half", label: "Half" },
-  { value: "quick", label: "Quick" }
+  { value: "ulta", label: "Ulta" },
+  { value: "popular", label: "Popular" },
+  { value: "3_goti", label: "3 Goti" },
+  { value: "2_goti", label: "2 Goti" },
+  { value: "1_goti", label: "1 Goti" },
+  { value: "1_goti_quick", label: "1 Goti Quick" },
+  { value: "snake", label: "Snake" },
+  { value: "ulta_snake", label: "Ulta Snake" },
+  { value: "snake_re_roll", label: "Snake Re-Roll" },
+  { value: "not_cut", label: "Not Cut" }
 ];
 
 export const quickAmounts = [1000, 2000, 3000, 5000, 7000, 8000, 10000];
