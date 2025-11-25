@@ -1,0 +1,16 @@
+FROM node:18
+
+WORKDIR /build
+
+# Copy frontend
+COPY frontend ./
+
+# Install and build (using npm for stability)
+RUN npm install --legacy-peer-deps && \
+    npm run build && \
+    npm install -g serve
+
+EXPOSE 3000
+
+# Serve the build
+CMD ["serve", "-s", "build", "-l", "3000"]
