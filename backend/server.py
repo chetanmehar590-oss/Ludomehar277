@@ -101,6 +101,139 @@ async def get_status_checks():
     
     return status_checks
 
+
+# Table Request Endpoints
+@api_router.post("/tables", response_model=TableRequest)
+async def create_table_request(table: TableRequestCreate):
+    """Create a new table request"""
+    table_dict = table.model_dump()
+    table_obj = TableRequest(**table_dict)
+    
+    # Convert to dict and serialize datetime
+    doc = table_obj.model_dump()
+    doc['timestamp'] = doc['timestamp'].isoformat()
+    
+    await db.table_requests.insert_one(doc)
+    logger.info(f"Table request created: {table_obj.id}")
+    return table_obj
+
+@api_router.get("/tables", response_model=List[TableRequest])
+async def get_table_requests(user_id: Optional[str] = None, status: Optional[str] = None):
+    """Get all table requests with optional filters"""
+    query = {}
+    if user_id:
+        query['user_id'] = user_id
+    if status:
+        query['status'] = status
+    
+    tables = await db.table_requests.find(query, {"_id": 0}).sort("timestamp", -1).to_list(1000)
+    
+    # Convert ISO string timestamps back to datetime
+    for table in tables:
+        if isinstance(table['timestamp'], str):
+            table['timestamp'] = datetime.fromisoformat(table['timestamp'])
+    
+    return tables
+
+@api_router.get("/tables/{table_id}", response_model=TableRequest)
+async def get_table_request(table_id: str):
+    """Get a specific table request by ID"""
+    table = await db.table_requests.find_one({"id": table_id}, {"_id": 0})
+    
+    if not table:
+        raise HTTPException(status_code=404, detail="Table request not found")
+    
+    if isinstance(table['timestamp'], str):
+        table['timestamp'] = datetime.fromisoformat(table['timestamp'])
+    
+    return table
+
+@api_router.put("/tables/{table_id}", response_model=TableRequest)
+async def update_table_request(table_id: str, update: TableRequestUpdate):
+    """Update a table request"""
+    # Get existing table
+    existing_table = await db.table_requests.find_one({"id": table_id}, {"_id": 0})
+    
+    if not existing_table:
+        raise HTTPException(status_code=404, detail="Table request not found")
+    
+    # Update only provided fields
+    update_data = {k: v for k, v in update.model_dump().items() if v is not None}
+    
+    if update_data:
+        await db.table_requests.update_one(
+            {"id": table_id},
+            {"$set": update_data}
+        )
+    
+    # Fetch updated table
+    updated_table = await db.table_requests.find_one({"id": table_id}, {"_id": 0})
+    
+    if isinstance(updated_table['timestamp'], str):
+        updated_table['timestamp'] = datetime.fromisoformat(updated_table['timestamp'])
+    
+    logger.info(f"Table request updated: {table_id}")
+    return updated_table
+
+@api_router.delete("/tables/{table_id}")
+async def delete_table_request(table_id: str):
+    """Delete a table request"""
+    result = await db.table_requests.delete_one({"id": table_id})
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Table request not found")
+    
+    logger.info(f"Table request deleted: {table_id}")
+    return {"message": "Table request deleted successfully", "id": table_id}
+
+@api_router.get("/tables/latest/{user_id}", response_model=TableRequest)
+async def get_latest_table_request(user_id: str):
+    """Get the latest table request for a user"""
+    tables = await db.table_requests.find(
+        {"user_id": user_id}, 
+        {"_id": 0}
+    ).sort("timestamp", -1).limit(1).to_list(1)
+    
+    if not tables:
+        raise HTTPException(status_code=404, detail="No table requests found for this user")
+    
+    table = tables[0]
+    if isinstance(table['timestamp'], str):
+        table['timestamp'] = datetime.fromisoformat(table['timestamp'])
+    
+    return table
+
+
+# User Balance Endpoints
+@api_router.get("/user/balance/{user_id}")
+async def get_user_balance(user_id: str):
+    """Get user balance"""
+    user = await db.users.find_one({"user_id": user_id}, {"_id": 0})
+    
+    if not user:
+        # Return default balance for new users
+        return {"user_id": user_id, "balance": 28.00}
+    
+    return {"user_id": user_id, "balance": user.get("balance", 28.00)}
+
+@api_router.post("/user/balance/{user_id}")
+async def update_user_balance(user_id: str, balance: float):
+    """Update user balance"""
+    result = await db.users.update_one(
+        {"user_id": user_id},
+        {
+            "$set": {
+                "balance": balance,
+                "last_updated": datetime.now(timezone.utc).isoformat()
+            }
+        },
+        upsert=True
+    )
+    
+    logger.info(f"Balance updated for user {user_id}: {balance}")
+    return {"user_id": user_id, "balance": balance, "updated": True}
+
+
 # Include the router in the main app
 app.include_router(api_router)
 
