@@ -14,10 +14,15 @@ from datetime import datetime, timezone
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
-# MongoDB connection
-mongo_url = os.environ['MONGO_URL']
+# MongoDB connection with fallback
+mongo_url = os.environ.get('MONGO_URL', 'mongodb://localhost:27017/')
+db_name = os.environ.get('DB_NAME', 'ludo_club_db')
+
 client = AsyncIOMotorClient(mongo_url)
-db = client[os.environ['DB_NAME']]
+db = client[db_name]
+
+logger = logging.getLogger(__name__)
+logger.info(f"Connecting to MongoDB: {mongo_url[:20]}... Database: {db_name}")
 
 # Create the main app without a prefix
 app = FastAPI()
