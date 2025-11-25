@@ -25,13 +25,52 @@ import {
 } from '../services/api';
 
 const HomePage = () => {
-  const [balance, setBalance] = useState(mockUser.balance);
-  const [lastRequest, setLastRequest] = useState(mockLastTableRequest);
+  const [balance, setBalance] = useState(28.00);
+  const [lastRequest, setLastRequest] = useState(null);
   const [amount, setAmount] = useState('');
   const [type, setType] = useState('full');
   const [gamePlus, setGamePlus] = useState('');
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [agreeRules, setAgreeRules] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  // Load user data on component mount
+  useEffect(() => {
+    loadUserData();
+  }, []);
+
+  const loadUserData = async () => {
+    try {
+      // Fetch user balance
+      const balanceData = await getUserBalance();
+      setBalance(balanceData.balance);
+
+      // Fetch latest table request
+      const latestTable = await getLatestTableRequest();
+      if (latestTable) {
+        setLastRequest(latestTable);
+      } else {
+        // Set default if no previous requests
+        setLastRequest({
+          id: 'default',
+          amount: 600.00,
+          type: 'full',
+          game_plus: 0,
+          options: []
+        });
+      }
+    } catch (error) {
+      console.error('Error loading user data:', error);
+      // Set defaults on error
+      setLastRequest({
+        id: 'default',
+        amount: 600.00,
+        type: 'full',
+        game_plus: 0,
+        options: []
+      });
+    }
+  };
 
   const handleCopyTable = () => {
     setAmount(lastRequest.amount.toString());
