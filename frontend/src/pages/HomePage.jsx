@@ -98,7 +98,7 @@ const HomePage = () => {
     });
   };
 
-  const handleSendTable = () => {
+  const handleSendTable = async () => {
     if (!amount || parseFloat(amount) <= 0) {
       toast({
         title: "Error",
@@ -117,28 +117,40 @@ const HomePage = () => {
       return;
     }
 
-    const newTable = {
-      id: `table_${Date.now()}`,
-      amount: parseFloat(amount),
-      type: type,
-      gamePlus: gamePlus ? parseInt(gamePlus) : 0,
-      options: selectedOptions,
-      timestamp: new Date().toISOString()
-    };
+    setLoading(true);
 
-    setLastRequest(newTable);
-    
-    // Reset form
-    setAmount('');
-    setType('full');
-    setGamePlus('');
-    setSelectedOptions([]);
-    setAgreeRules(false);
+    try {
+      // Create table request in backend
+      const newTable = await createTableRequest({
+        amount: parseFloat(amount),
+        type: type,
+        game_plus: gamePlus ? parseInt(gamePlus) : 0,
+        options: selectedOptions
+      });
 
-    toast({
-      title: "Table Sent Successfully!",
-      description: `Your table request for ₹${amount} has been submitted`
-    });
+      setLastRequest(newTable);
+      
+      // Reset form
+      setAmount('');
+      setType('full');
+      setGamePlus('');
+      setSelectedOptions([]);
+      setAgreeRules(false);
+
+      toast({
+        title: "Table Sent Successfully!",
+        description: `Your table request for ₹${amount} has been submitted`
+      });
+    } catch (error) {
+      console.error('Error submitting table:', error);
+      toast({
+        title: "Error",
+        description: "Failed to submit table request. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
