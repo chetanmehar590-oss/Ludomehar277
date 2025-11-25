@@ -242,10 +242,17 @@ async def update_user_balance(user_id: str, balance: float):
 # Include the router in the main app
 app.include_router(api_router)
 
+# CORS Configuration
+cors_origins = os.environ.get('CORS_ORIGINS', '*')
+if cors_origins == '*':
+    allow_origins = ["*"]
+else:
+    allow_origins = cors_origins.split(',')
+
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
-    allow_origins=os.environ.get('CORS_ORIGINS', '*').split(','),
+    allow_origins=allow_origins,
     allow_methods=["*"],
     allow_headers=["*"],
 )
