@@ -1,0 +1,20 @@
+services:
+  - name: backend
+    type: web
+    instance_type: nano
+    regions: sin
+    env:
+      - name: MONGO_URL
+      - name: DB_NAME
+      - name: TELEGRAM_BOT_TOKEN
+      - name: WEB_APP_URL
+      - name: CORS_ORIGINS
+    build:
+      buildpack:
+        run: python main.py
+    ports:
+      - port: 8000
+        protocol: http
+    health_checks:
+      - path: /api/
+        port: 8000
