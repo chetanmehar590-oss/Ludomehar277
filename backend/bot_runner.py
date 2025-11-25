@@ -10,7 +10,18 @@ Usage:
 import asyncio
 import logging
 import sys
-from telegram_bot import start_bot, stop_bot
+import os
+from pathlib import Path
+
+# Add backend to path if needed
+current_dir = Path(__file__).parent
+sys.path.insert(0, str(current_dir))
+
+try:
+    from telegram_bot import start_bot, stop_bot
+except ImportError:
+    # Try absolute import
+    from backend.telegram_bot import start_bot, stop_bot
 
 # Configure logging
 logging.basicConfig(
