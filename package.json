@@ -1,0 +1,14 @@
+{
+  "name": "deep-night-ludo-club",
+  "version": "1.0.0",
+  "description": "Deep Night Ludo Club - Telegram Bot with Web App",
+  "scripts": {
+    "start": "cd frontend && yarn start",
+    "build": "cd frontend && yarn build",
+    "backend": "cd backend && uvicorn server:app --reload",
+    "bot": "cd backend && python bot_runner.py"
+  },
+  "keywords": ["telegram-bot", "ludo", "gaming", "fastapi", "react"],
+  "author": "Deep Night Ludo Club",
+  "license": "MIT"
+}
