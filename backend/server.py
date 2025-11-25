@@ -1,4 +1,4 @@
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI, APIRouter, HTTPException
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -6,7 +6,7 @@ import os
 import logging
 from pathlib import Path
 from pydantic import BaseModel, Field, ConfigDict
-from typing import List
+from typing import List, Optional
 import uuid
 from datetime import datetime, timezone
 
@@ -36,6 +36,41 @@ class StatusCheck(BaseModel):
 
 class StatusCheckCreate(BaseModel):
     client_name: str
+
+
+# Table Booking Models
+class TableRequest(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: Optional[str] = None
+    amount: float
+    type: str
+    game_plus: int = 0
+    options: List[str] = []
+    status: str = "pending"  # pending, confirmed, completed, cancelled
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class TableRequestCreate(BaseModel):
+    user_id: Optional[str] = None
+    amount: float
+    type: str
+    game_plus: int = 0
+    options: List[str] = []
+
+class TableRequestUpdate(BaseModel):
+    amount: Optional[float] = None
+    type: Optional[str] = None
+    game_plus: Optional[int] = None
+    options: Optional[List[str]] = None
+    status: Optional[str] = None
+
+class UserBalance(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    
+    user_id: str
+    balance: float
+    last_updated: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 # Add your routes to the router instead of directly to app
 @api_router.get("/")
