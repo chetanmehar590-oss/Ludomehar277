@@ -1,0 +1,23 @@
+# Simple single-stage Dockerfile for frontend
+FROM node:18-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Copy entire frontend directory
+COPY ./frontend /app
+
+# Install dependencies
+RUN yarn install
+
+# Build the production app
+RUN yarn build
+
+# Install serve to run the app
+RUN npm install -g serve
+
+# Expose port
+EXPOSE 3000
+
+# Start command
+CMD ["serve", "-s", "build", "-l", "3000"]
