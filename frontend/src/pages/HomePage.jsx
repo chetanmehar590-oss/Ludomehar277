@@ -13,13 +13,16 @@ import {
 import { Copy, Pencil } from 'lucide-react';
 import { toast } from '../hooks/use-toast';
 import {
-  mockUser,
-  mockLastTableRequest,
   tableTypes,
   quickAmounts,
   quickGamePlus,
   tableOptions
 } from '../mock';
+import {
+  getUserBalance,
+  getLatestTableRequest,
+  createTableRequest
+} from '../services/api';
 
 const HomePage = () => {
   const [balance, setBalance] = useState(mockUser.balance);
