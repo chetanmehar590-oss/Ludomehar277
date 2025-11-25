@@ -1,15 +1,19 @@
-FROM python:3.11-slim
+FROM python:3.11
 
-WORKDIR /app
+WORKDIR /workspace
 
 # Copy everything
 COPY . .
 
-# Install requirements
-RUN cd backend && pip install --no-cache-dir -r requirements.txt
+# Go to backend and install
+WORKDIR /workspace/backend
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Set environment
+# Back to root for running
+WORKDIR /workspace
+
+# Set env
 ENV PYTHONUNBUFFERED=1
 
-# Run bot from root
+# Run bot
 CMD ["python", "-m", "backend.bot_runner"]
