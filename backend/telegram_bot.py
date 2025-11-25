@@ -113,7 +113,7 @@ async def error_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 def create_bot_application():
     """Create and configure the bot application"""
     if not TELEGRAM_BOT_TOKEN:
-        logger.error("Cannot create bot application without token")
+        logger.warning("Cannot create bot application without token")
         return None
     
     # Create application
