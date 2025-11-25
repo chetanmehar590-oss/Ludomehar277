@@ -33,18 +33,11 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     else:
         # If in private chat, send welcome message
         welcome_message = (
-            f"🎲 Welcome to Deep Night Ludo Club Bot, {user.first_name}!
-
-"
-            "To use this bot:
-"
-            "1. Add me to your Ludo gaming group
-"
-            "2. Use /start command in the group
-"
-            "3. Click 'Place New Table' button to book your table
-
-"
+            f"🎲 Welcome to Deep Night Ludo Club Bot, {user.first_name}!\n\n"
+            "To use this bot:\n"
+            "1. Add me to your Ludo gaming group\n"
+            "2. Use /start command in the group\n"
+            "3. Click 'Place New Table' button to book your table\n\n"
             "📱 The booking form will open inside Telegram!"
         )
         await update.message.reply_text(welcome_message)
