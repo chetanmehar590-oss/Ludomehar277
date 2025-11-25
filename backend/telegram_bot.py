@@ -18,8 +18,9 @@ TELEGRAM_BOT_TOKEN = os.environ.get('TELEGRAM_BOT_TOKEN')
 WEB_APP_URL = os.environ.get('WEB_APP_URL', 'https://your-app-url.com')
 
 if not TELEGRAM_BOT_TOKEN:
-    logger.error("TELEGRAM_BOT_TOKEN not found in environment variables!")
-    raise ValueError("TELEGRAM_BOT_TOKEN is required")
+    logger.warning("TELEGRAM_BOT_TOKEN not found in environment variables!")
+    logger.warning("Bot will not start. Please set TELEGRAM_BOT_TOKEN in environment.")
+    # Don't raise error, just log warning so backend can still start
 
 
 async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
