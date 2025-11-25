@@ -1,43 +1,26 @@
-# Multi-stage build for React frontend
-FROM node:18-alpine AS builder
-
-# Set working directory
-WORKDIR /build
-
-# Copy package.json and yarn.lock from frontend directory
-COPY ./frontend/package.json ./package.json
-COPY ./frontend/yarn.lock ./yarn.lock
-
-# Install dependencies
-RUN yarn install --frozen-lockfile --network-timeout 100000
-
-# Copy all frontend source files
-COPY ./frontend ./
-
-# Build the React app
-RUN yarn build
-
-# Production stage - lightweight server
+# Simple and reliable frontend Dockerfile
 FROM node:18-alpine
 
 # Set working directory
 WORKDIR /app
 
-# Install serve globally to serve static files
-RUN npm install -g serve@14.2.1
+# Copy everything
+COPY . .
 
-# Copy built files from builder stage
-COPY --from=builder /build/build ./build
+# Change to frontend directory
+WORKDIR /app/frontend
 
-# Expose port 3000
+# Install dependencies
+RUN yarn install --network-timeout 100000
+
+# Build the app
+RUN yarn build
+
+# Install serve
+RUN npm install -g serve
+
+# Expose port
 EXPOSE 3000
 
-# Set environment variable for serve
-ENV PORT=3000
-
-# Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD node -e "require('http').get('http://localhost:3000', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
-
-# Start the app using serve
-CMD ["serve", "-s", "build", "-l", "3000", "--no-clipboard"]
+# Start the app
+CMD ["serve", "-s", "build", "-p", "3000"]
