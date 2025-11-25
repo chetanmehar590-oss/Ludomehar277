@@ -1,6 +1,7 @@
 # Node modules
 node_modules/
 frontend/node_modules/
+*/node_modules/
 
 # Python cache
 __pycache__/
@@ -8,13 +9,15 @@ __pycache__/
 *.pyo
 *.pyd
 .Python
+backend/
 
 # Environment variables
 .env
 .env.local
+.env.*.local
 
-# Build outputs
-frontend/build/
+# Build outputs (don't ignore, we need to build)
+# frontend/build/
 frontend/dist/
 
 # IDE
@@ -26,10 +29,14 @@ frontend/dist/
 # Git
 .git/
 .gitignore
+.github/
 
 # Logs
 *.log
 logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
 # OS
 .DS_Store
@@ -37,3 +44,12 @@ Thumbs.db
 
 # Documentation
 *.md
+
+# Test files
+**/*.test.js
+**/*.spec.js
+**/__tests__/
+
+# Other
+.prettierrc
+.eslintrc*
