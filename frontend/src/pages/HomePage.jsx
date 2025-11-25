@@ -351,10 +351,10 @@ const HomePage = () => {
         <Button
           onClick={handleSendTable}
           className="w-full bg-teal-700 hover:bg-teal-800 text-white text-lg py-7 font-semibold"
-          disabled={!agreeRules}
+          disabled={!agreeRules || loading}
         >
           <span className="text-xl mr-2">✅</span>
-          Send Table
+          {loading ? 'Sending...' : 'Send Table'}
         </Button>
       </div>
     </div>
