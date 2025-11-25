@@ -1,0 +1,14 @@
+FROM node:18
+
+WORKDIR /workspace
+
+# Copy only frontend
+COPY frontend /workspace/frontend
+
+# Install and build in one go
+WORKDIR /workspace/frontend
+RUN npm install && npm run build && npm install -g serve
+
+EXPOSE 3000
+
+CMD ["serve", "-s", "build", "-p", "3000"]
