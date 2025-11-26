@@ -34,6 +34,25 @@ const HomePage = () => {
   const [agreeRules, setAgreeRules] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  // Initialize Telegram WebApp
+  useEffect(() => {
+    if (window.Telegram && window.Telegram.WebApp) {
+      const tg = window.Telegram.WebApp;
+      
+      // Expand to full height
+      tg.expand();
+      
+      // Prevent closing on swipe
+      tg.enableClosingConfirmation();
+      
+      // Set background and header colors
+      tg.setHeaderColor('#ffffff');
+      tg.setBackgroundColor('#f9fafb');
+      
+      console.log('✅ Telegram WebApp configured');
+    }
+  }, []);
+
   // Load user data on component mount
   useEffect(() => {
     loadUserData();
