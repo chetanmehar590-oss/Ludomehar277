@@ -78,12 +78,14 @@ async def send_table_button(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "👇 Book your table now!"
     )
     
-    await update.message.reply_text(
+    sent_message = await update.message.reply_text(
         message,
         reply_markup=reply_markup,
         parse_mode='Markdown'
     )
     logger.info(f"Table button sent to chat: {update.effective_chat.id}")
+    
+    return sent_message  # Return message object for pinning
 
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
