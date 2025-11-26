@@ -29,16 +29,30 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_type = update.effective_chat.type
     
     if chat_type in ['group', 'supergroup']:
-        # If in a group, send the Place New Table button
-        await send_table_button(update, context)
+        # If in a group, send the Place New Table button and pin it
+        message = await send_table_button(update, context)
+        
+        # Try to pin the message (needs admin rights)
+        try:
+            if message:
+                await context.bot.pin_chat_message(
+                    chat_id=update.effective_chat.id,
+                    message_id=message.message_id,
+                    disable_notification=True  # Silent pin
+                )
+                logger.info(f"Message pinned in chat: {update.effective_chat.id}")
+        except Exception as e:
+            logger.warning(f"Could not pin message: {e}")
+            # Bot needs to be admin to pin messages
     else:
         # If in private chat, send welcome message
         welcome_message = (
             f"🎲 Welcome to Deep Night Ludo Club Bot, {user.first_name}!\n\n"
             "To use this bot:\n"
             "1. Add me to your Ludo gaming group\n"
-            "2. Use /start command in the group\n"
-            "3. Click 'Place New Table' button to book your table\n\n"
+            "2. Make me admin (so I can pin messages)\n"
+            "3. Use /start command in the group\n"
+            "4. I'll send and pin the 'Place New Table' button\n\n"
             "📱 The booking form will open inside Telegram!"
         )
         await update.message.reply_text(welcome_message)
