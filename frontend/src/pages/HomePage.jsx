@@ -34,37 +34,8 @@ const HomePage = () => {
   const [agreeRules, setAgreeRules] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // Initialize Telegram WebApp and load data
+  // Load data on mount
   useEffect(() => {
-    // Telegram WebApp initialization
-    if (window.Telegram && window.Telegram.WebApp) {
-      const tg = window.Telegram.WebApp;
-      
-      try {
-        // Ready signal
-        tg.ready();
-        
-        // Expand to full height
-        tg.expand();
-        
-        // Disable vertical swipes (prevents closing)
-        tg.disableVerticalSwipes();
-        
-        // Enable closing confirmation
-        tg.enableClosingConfirmation();
-        
-        // Lock orientation to portrait (if supported)
-        if (tg.lockOrientation) {
-          tg.lockOrientation();
-        }
-        
-        console.log('✅ Telegram WebApp initialized and locked');
-      } catch (error) {
-        console.error('Telegram WebApp error:', error);
-      }
-    }
-    
-    // Load user data
     loadUserData();
   }, []);
 
