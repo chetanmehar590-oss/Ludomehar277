@@ -60,32 +60,20 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def send_table_button(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Send 'Place New Table' button in group"""
-    # Use simple URL button instead of WebApp (more reliable)
-    keyboard = [
-        [
-            InlineKeyboardButton(
-                "🎲 Place New Table",
-                url=WEB_APP_URL
-            )
-        ]
-    ]
-    reply_markup = InlineKeyboardMarkup(keyboard)
-    
+    # Simple message - no button yet
     message = (
         "🎮 **Deep Night Ludo Club**\n\n"
-        "Click the button below to place your table request:\n"
-        "💰 Amount | 🎲 Type | 📊 Game+ | ⚙️ Options\n\n"
-        "👇 Book your table now!"
+        "Button functionality ready to be configured.\n"
+        "Please specify what you want in the button."
     )
     
     sent_message = await update.message.reply_text(
         message,
-        reply_markup=reply_markup,
         parse_mode='Markdown'
     )
-    logger.info(f"Table button sent to chat: {update.effective_chat.id}")
+    logger.info(f"Message sent to chat: {update.effective_chat.id}")
     
-    return sent_message  # Return message object for pinning
+    return sent_message
 
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
