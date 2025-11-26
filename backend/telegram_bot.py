@@ -60,12 +60,12 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def send_table_button(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Send 'Place New Table' button in group"""
-    # Create Web App button
+    # Use simple URL button instead of WebApp (more reliable)
     keyboard = [
         [
             InlineKeyboardButton(
                 "🎲 Place New Table",
-                web_app=WebAppInfo(url=WEB_APP_URL)
+                url=WEB_APP_URL
             )
         ]
     ]
