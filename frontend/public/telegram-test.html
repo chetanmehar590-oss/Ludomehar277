@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deep Night Ludo Club</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 { color: #2a5298; margin-bottom: 20px; text-align: center; }
+        .section {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+        }
+        .section-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        .quick-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .quick-btn {
+            padding: 8px 16px;
+            border: 2px solid #2a5298;
+            background: white;
+            color: #2a5298;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .quick-btn:active {
+            background: #2a5298;
+            color: white;
+        }
+        .checkbox-group {
+            margin: 10px 0;
+        }
+        .checkbox-item {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+        .checkbox-item input {
+            width: auto;
+            margin-right: 10px;
+            margin-bottom: 0;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: #2a5298;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .submit-btn:active {
+            background: #1e3a6d;
+        }
+        .balance {
+            text-align: center;
+            font-size: 20px;
+            color: #27ae60;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎲 DEEP NIGHT LUDO CLUB</h1>
+        
+        <div class="balance">Balance: ₹28.00</div>
+        
+        <div class="section">
+            <div class="section-title">💰 Amount</div>
+            <input type="number" id="amount" placeholder="Enter amount" />
+            <div class="quick-buttons">
+                <button class="quick-btn" onclick="setAmount(1000)">₹1000</button>
+                <button class="quick-btn" onclick="setAmount(2000)">₹2000</button>
+                <button class="quick-btn" onclick="setAmount(3000)">₹3000</button>
+                <button class="quick-btn" onclick="setAmount(5000)">₹5000</button>
+                <button class="quick-btn" onclick="setAmount(7000)">₹7000</button>
+                <button class="quick-btn" onclick="setAmount(10000)">₹10000</button>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">🎲 Type</div>
+            <select id="type">
+                <option value="full">Full</option>
+                <option value="ulta">Ulta</option>
+                <option value="popular">Popular</option>
+                <option value="3_goti">3 Goti</option>
+                <option value="2_goti">2 Goti</option>
+                <option value="1_goti">1 Goti</option>
+                <option value="snake">Snake</option>
+                <option value="ulta_snake">Ulta Snake</option>
+            </select>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">📊 Game+</div>
+            <input type="number" id="gameplus" placeholder="Enter Game+" />
+            <div class="quick-buttons">
+                <button class="quick-btn" onclick="setGamePlus(100)">100+</button>
+                <button class="quick-btn" onclick="setGamePlus(200)">200+</button>
+                <button class="quick-btn" onclick="setGamePlus(500)">500+</button>
+                <button class="quick-btn" onclick="setGamePlus(1000)">1000+</button>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">⚙️ Options</div>
+            <div class="checkbox-group">
+                <div class="checkbox-item">
+                    <input type="checkbox" id="fresh_id" />
+                    <label for="fresh_id">Fresh Id</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="code_aap_doge" />
+                    <label for="code_aap_doge">Code aap doge</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="no_iphone" />
+                    <label for="no_iphone">No iPhone</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="no_king_pass" />
+                    <label for="no_king_pass">No king pass</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="auto_loss" />
+                    <label for="auto_loss">Auto loss</label>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="checkbox-item">
+                <input type="checkbox" id="agree" />
+                <label for="agree">I agree with the Game Rules</label>
+            </div>
+        </div>
+        
+        <button class="submit-btn" onclick="submitTable()">✅ Send Table</button>
+    </div>
+    
+    <script>
+        // Initialize Telegram WebApp
+        let tg = window.Telegram.WebApp;
+        tg.ready();
+        tg.expand();
+        
+        function setAmount(value) {
+            document.getElementById('amount').value = value;
+        }
+        
+        function setGamePlus(value) {
+            document.getElementById('gameplus').value = value;
+        }
+        
+        function submitTable() {
+            const amount = document.getElementById('amount').value;
+            const type = document.getElementById('type').value;
+            const gameplus = document.getElementById('gameplus').value;
+            const agree = document.getElementById('agree').checked;
+            
+            if (!amount) {
+                tg.showAlert('Please enter amount!');
+                return;
+            }
+            
+            if (!agree) {
+                tg.showAlert('Please agree to game rules!');
+                return;
+            }
+            
+            // Get selected options
+            const options = [];
+            if (document.getElementById('fresh_id').checked) options.push('Fresh Id');
+            if (document.getElementById('code_aap_doge').checked) options.push('Code aap doge');
+            if (document.getElementById('no_iphone').checked) options.push('No iPhone');
+            if (document.getElementById('no_king_pass').checked) options.push('No king pass');
+            if (document.getElementById('auto_loss').checked) options.push('Auto loss');
+            
+            // Send data back to bot (optional)
+            const data = {
+                amount: amount,
+                type: type,
+                gameplus: gameplus || 0,
+                options: options
+            };
+            
+            // Show success
+            tg.showAlert('✅ Table Sent Successfully!\nAmount: ₹' + amount, function() {
+                tg.close();
+            });
+        }
+    </script>
+</body>
+</html>
