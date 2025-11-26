@@ -1,13 +1,24 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from './pages/HomePage';
 import { Toaster } from './components/ui/toaster';
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API = `${BACKEND_URL}/api`;
-
 function App() {
+  useEffect(() => {
+    // Telegram WebApp initialization
+    try {
+      if (window.Telegram && window.Telegram.WebApp) {
+        const tg = window.Telegram.WebApp;
+        tg.ready();
+        tg.expand();
+        console.log('✅ Telegram initialized');
+      }
+    } catch (error) {
+      console.error('Telegram init error:', error);
+    }
+  }, []);
+
   return (
     <div className="App">
       <BrowserRouter>
